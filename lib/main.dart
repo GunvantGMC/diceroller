@@ -46,12 +46,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Shuffle Number : $diceNum",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
-              ),
+            Image.asset(
+              "assets/images/$diceNum.png",
+              height: 100,
+              width: 100,
             ),
             const SizedBox(height: 100),
             FloatingActionButton.extended(
