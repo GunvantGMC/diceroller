@@ -13,11 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Dice Roller',
+      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Dice Roller App'),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -33,6 +33,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   int diceNum = 4;
+  double height = 100, width = 100;
+  AnimationController? rotationController;
+  bool isRotating = false;
+  @override
+  void initState() {
+    rotationController =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+
+    rotationController!.addStatusListener((AnimationStatus status) {
+      print("SS ${status.index}");
+      if (status.index == 3) {
+        getNewNum();
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +62,16 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Shuffle Number : $diceNum",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
+            RotationTransition(
+              turns: Tween(begin: 0.0, end: 1.0).animate(rotationController!),
+              child: Image.asset(
+                "assets/images/$diceNum.png",
               ),
             ),
             const SizedBox(height: 100),
             FloatingActionButton.extended(
               onPressed: () async {
-                getNewNum();
+                rotationController!.forward(from: 0.0);
               },
               label: const Text("Shuffle"),
               icon: const Icon(Icons.shuffle),
@@ -75,6 +90,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     }
     setState(() {
       diceNum = rndNum;
+      height = 100;
+      width = 100;
       print("Rnd Num : $rndNum");
     });
   }
